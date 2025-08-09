@@ -1,62 +1,40 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Video Background Setup
+document.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('myVideo');
-    
-    // Auto-play video with fallback
-    function playVideo() {
-        const promise = video.play();
-        if (promise !== undefined) {
-            promise.catch(error => {
-                video.muted = true;
-                video.play();
-            });
-        }
-    }
-    
-    // Initialize video
-    video.addEventListener('loadedmetadata', playVideo);
-
-    // Header scroll effect
     const header = document.querySelector('header');
-    window.addEventListener('scroll', function() {
+    const navLinks = document.querySelectorAll('nav a');
+    const sections = document.querySelectorAll('section');
+
+    /* Autoplay fallback */
+    video.play().catch(() => {
+        video.muted = true;
+        video.play();
+    });
+
+    /* Header scroll effect */
+    window.addEventListener('scroll', () => {
         header.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // Smooth scrolling for navigation
-    document.querySelectorAll('nav a').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+    /* Smooth scroll */
+    navLinks.forEach(link => {
+        link.addEventListener('click', e => {
             e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                const scrollPosition = targetElement.offsetTop - 80;
-                window.scrollTo({
-                    top: scrollPosition,
-                    behavior: 'smooth'
-                });
+            const target = document.querySelector(link.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
             }
         });
     });
 
-    // Highlight active menu item on scroll
-    const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('nav a');
-    
-    window.addEventListener('scroll', function() {
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            if (window.scrollY >= sectionTop - 200) {
-                current = section.getAttribute('id');
+    /* Highlight active nav */
+    window.addEventListener('scroll', () => {
+        const pos = window.scrollY + window.innerHeight / 2;
+        let active = '';
+        sections.forEach(sec => {
+            if (pos >= sec.offsetTop && pos <= sec.offsetTop + sec.offsetHeight) {
+                active = sec.id;
             }
         });
-        
-        navLinks.forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
-        });
+        navLinks.forEach(a => a.classList.toggle('active', a.hash === `#${active}`));
     });
-
-    // Set initial active link
-    window.dispatchEvent(new Event('scroll'));
 });
