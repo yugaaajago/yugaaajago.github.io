@@ -9,26 +9,29 @@
     --accent-color: #ff9e9e;
 }
 
-* {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
     color: var(--light-text);
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 /* Video Background */
 .video-background {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     z-index: -1;
 }
 
@@ -40,30 +43,29 @@ body {
 
 .video-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
 }
 
 /* Header */
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 5%;
-    position: fixed;
-    width: 100%;
-    z-index: 100;
-    background-color: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: padding 0.3s, background 0.3s;
+    z-index: 100;
 }
 
 header.scrolled {
     padding: 15px 5%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.8);
 }
 
 .logo {
@@ -74,48 +76,42 @@ header.scrolled {
 
 nav ul {
     display: flex;
+    gap: 2rem;
     list-style: none;
 }
 
-nav ul li {
-    margin-left: 2rem;
-}
-
-nav ul li a {
+nav a {
     color: var(--light-text);
     text-decoration: none;
     font-weight: 600;
     letter-spacing: 1px;
-    transition: all 0.3s ease;
     position: relative;
-    padding-bottom: 5px;
+    padding-bottom: 4px;
+    transition: color 0.3s;
 }
 
-nav ul li a:hover {
-    color: var(--primary-color);
-}
-
-nav ul li a.active {
-    color: var(--primary-color);
-}
-
-nav ul li a::after {
+nav a::after {
     content: '';
     position: absolute;
+    left: 0;
+    bottom: 0;
     width: 0;
     height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: var(--primary-color);
-    transition: width 0.3s ease;
+    background: var(--primary-color);
+    transition: width 0.3s;
 }
 
-nav ul li a:hover::after,
-nav ul li a.active::after {
+nav a:hover,
+nav a.active {
+    color: var(--primary-color);
+}
+
+nav a:hover::after,
+nav a.active::after {
     width: 100%;
 }
 
-/* Hero Section */
+/* Hero */
 .hero {
     height: 100vh;
     display: flex;
@@ -140,19 +136,18 @@ blockquote {
 }
 
 blockquote footer {
-    font-size: clamp(1rem, 1.5vw, 1.2rem);
     margin-top: 1rem;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
     font-style: italic;
 }
 
-/* About Section */
+/* About */
 .about-section {
-    height: 100vh;
+    min-height: 100vh;
     padding: 100px 5% 50px;
     background: linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
     display: flex;
     align-items: center;
-    border-top: 1px solid rgba(241, 78, 78, 0.2);
 }
 
 .about-container {
@@ -169,8 +164,7 @@ blockquote footer {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-    margin-top: 40px;
-    transition: transform 0.5s ease;
+    transition: transform 0.5s;
 }
 
 .about-photo:hover {
@@ -179,7 +173,6 @@ blockquote footer {
 
 .about-photo img {
     width: 100%;
-    height: auto;
     display: block;
 }
 
@@ -189,38 +182,33 @@ blockquote footer {
 
 .about-content h2 {
     font-size: clamp(2rem, 3vw, 3rem);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .about-content h3 {
     font-size: clamp(1.5rem, 2vw, 2rem);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     color: var(--secondary-color);
 }
 
-.detail-item {
-    margin-bottom: 1.2rem;
+.about-details {
+    margin-bottom: 1rem;
 }
 
-.detail-label {
+.about-details dt {
     color: var(--secondary-color);
     font-weight: 600;
+    margin-top: 0.75rem;
 }
 
 .about-description {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     padding-left: 1rem;
     border-left: 3px solid var(--primary-color);
     line-height: 1.8;
 }
 
-/* Responsive Design */
-@media (max-width: 992px) {
-    .about-container {
-        gap: 30px;
-    }
-}
-
+/* Responsive */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -233,11 +221,7 @@ blockquote footer {
 
     nav ul {
         flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    nav ul li {
-        margin: 0 10px 10px;
+        gap: 1rem;
     }
 
     .about-container {
@@ -246,29 +230,6 @@ blockquote footer {
     }
 
     .about-photo {
-        margin: 20px auto;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero h1 {
-        font-size: 2rem;
-    }
-
-    blockquote {
-        font-size: 1.1rem;
-    }
-
-    .about-photo {
         max-width: 250px;
     }
-}
-
-/* Smooth Scrolling */
-html {
-    scroll-behavior: smooth;
-}
-
-section {
-    scroll-snap-align: start;
 }
